@@ -1,0 +1,10 @@
+---
+
+- name: Configure Tor relay
+  hosts: all
+  sudo: True
+  gather_facts: True
+  roles:
+    - tools
+    - security
+    - tor

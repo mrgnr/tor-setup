@@ -1,0 +1,19 @@
+---
+
+- name: Add Tor repository
+  apt_repository: repo={{ item }} state=present
+  with_items:
+    - "deb http://deb.torproject.org/torproject.org trusty main"
+    - "deb-src http://deb.torproject.org/torproject.org trusty main"
+
+- name: Add Tor repository key
+  apt_key: keyserver=keys.gnupg.net id=886DDD89
+
+- name: Update apt cache
+  apt: update_cache=yes
+
+- name: Install Tor
+  apt: name={{ item }} state=latest
+  with_items:
+    - tor
+    - deb.torproject.org-keyring

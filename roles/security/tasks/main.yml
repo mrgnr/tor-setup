@@ -1,0 +1,24 @@
+---
+
+- name: Update apt cache
+  apt: update_cache=yes cache_valid_time=3600
+
+- name: Install UFW
+  apt: name=ufw state=latest
+
+- name: Open SSH port
+  ufw: rule=allow port={{ SSH_PORT }}
+
+- name: Open Tor port
+  ufw: rule=allow port={{ TOR_PORT }}
+
+- name: Install fail2ban
+  apt: name=fail2ban state=latest
+
+- name: Copy fail2ban configuration
+  template: src=jail.local.j2 dest=/etc/fail2ban
+
+- name: Restart fail2ban
+  service: name=fail2ban state=restarted
+
+# TODO: ssh settings, encrypted swap, cron job for updates
