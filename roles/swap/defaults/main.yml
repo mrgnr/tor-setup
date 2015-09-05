@@ -1,0 +1,5 @@
+---
+
+swap_location: /cryptswap
+swap_size: 1G
+swap_swappiness: 10

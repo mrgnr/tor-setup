@@ -5,6 +5,7 @@
   sudo: True
   gather_facts: True
   roles:
+    - swap
     - tools
     - security
     - tor
