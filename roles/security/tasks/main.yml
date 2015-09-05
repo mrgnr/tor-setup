@@ -45,4 +45,9 @@
 - name: Restart SSH daemon
   service: name=ssh state=restarted
 
-# TODO: encrypted swap, cron job for updates
+- name: Install updates daily
+  cron: >
+    name="install updates"
+    special_time=daily
+    user=root
+    job="apt-get update && apt-get -y upgrade"
