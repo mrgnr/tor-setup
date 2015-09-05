@@ -6,11 +6,8 @@
 - name: Install UFW
   apt: name=ufw state=latest
 
-- name: Open SSH port
-  ufw: rule=allow port={{ SSH_PORT }}
-
-- name: Open Tor port
-  ufw: rule=allow port={{ TOR_PORT }}
+- name: Open SSH port and enable rate limiting
+  ufw: rule=limit port={{ ssh_port }}
 
 - name: Install fail2ban
   apt: name=fail2ban state=latest
@@ -21,4 +18,31 @@
 - name: Restart fail2ban
   service: name=fail2ban state=restarted
 
-# TODO: ssh settings, encrypted swap, cron job for updates
+- name: Create SSH user with sudo permission
+  user: name={{ ssh_user }} groups="sudo"
+  when: ssh_add_user
+
+- name: Add SSH pubkey
+  authorized_key: >
+    user={{ ssh_user }}
+    key={{ lookup('file', {{ ssh_key_path }}) }}
+  when: ssh_add_key
+
+- name: Disable SSH root login
+  lineinfile: >
+    dest=/etc/ssh/sshd_config
+    regexp="^PermitRootLogin"
+    line="PermitRootLogin no"
+    state=present
+
+- name: Disable SSH password authentication
+  lineinfile: 
+    dest=/etc/ssh/sshd_config
+    regexp="^PasswordLogin"
+    line="PasswordLogin no"
+    state=present
+
+- name: Restart SSH daemon
+  service: name=ssh state=restarted
+
+# TODO: encrypted swap, cron job for updates

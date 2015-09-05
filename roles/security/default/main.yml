@@ -1,7 +1,13 @@
 ---
 
-FAIL2BAN_SSH_ENABLED: "true"
-FAIL2BAN_SSH_PORT: "ssh"
-FAIL2BAN_SSH_MAXRETRY: "3"
-FAIL2BAN_SSH_BANTIME: "3600"
-FAIL2BAN_SSH_IGNOREIP: "127.0.0.1/8"
+ssh_port: 22
+ssh_add_key: true
+ssh_key_path: "~/.ssh/id_rsa.pub"
+ssh_add_user: true
+ssh_user: "user"
+
+fail2ban_ssh_enabled: "true"
+fail2ban_ssh_port: {{ ssh_port }}
+fail2ban_ssh_maxretry: "3"
+fail2ban_ssh_bantime: "3600"
+fail2ban_ssh_ignoreip: "127.0.0.1/8"
