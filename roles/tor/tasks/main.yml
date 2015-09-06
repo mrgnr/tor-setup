@@ -1,7 +1,7 @@
 ---
 
 - name: Add Tor repository
-  apt_repository: repo={{ item }} state=present
+  apt_repository: repo="{{ item }}" state=present
   with_items:
     - "deb http://deb.torproject.org/torproject.org trusty main"
     - "deb-src http://deb.torproject.org/torproject.org trusty main"
