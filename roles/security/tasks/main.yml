@@ -22,8 +22,15 @@
   service: name=fail2ban state=restarted
 
 - name: Create SSH user with sudo permission
-  user: name={{ ssh_user }} groups="sudo"
+  user: name="{{ ssh_user }}" groups=sudo shell=/bin/bash
   when: ssh_add_user
+
+- name: Allow user to sudo without a password
+  lineinfile: >
+    dest=/etc/sudoers
+    line="{{ ssh_user }} ALL=(ALL) NOPASSWD: ALL"
+    state=present
+    validate='visudo -cf %s'
 
 - name: Add SSH pubkey
   authorized_key: >
