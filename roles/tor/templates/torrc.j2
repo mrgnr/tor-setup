@@ -1,4 +1,7 @@
 ORPort {{ tor_port }}
+{% if tor_dir_enable %}
+DirPort {{ tor_dir_port }}
+{% endif %}
 Nickname {{ tor_nickname }}
 RelayBandwidthRate {{ tor_bandwidth_rate }}
 RelayBandwidthBurst {{ tor_bandwidth_burst }}

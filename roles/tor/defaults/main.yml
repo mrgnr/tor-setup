@@ -7,3 +7,5 @@ tor_accounting_start: "month 1 01:00"
 tor_contact_info: ""
 tor_my_family: ""
 tor_exit_policy: "reject *:*"
+tor_dir_enable: True
+tor_dir_port: "9030"
