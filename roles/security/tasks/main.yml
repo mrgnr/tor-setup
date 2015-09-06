@@ -9,11 +9,14 @@
 - name: Open SSH port and enable rate limiting
   ufw: rule=limit port={{ ssh_port }}
 
+- name: Enable firewall
+  ufw: state=enabled logging=on
+
 - name: Install fail2ban
   apt: name=fail2ban state=latest
 
 - name: Copy fail2ban configuration
-  template: src=jail.local.j2 dest=/etc/fail2ban
+  template: src=jail.local.j2 dest=/etc/fail2ban/jail.local
 
 - name: Restart fail2ban
   service: name=fail2ban state=restarted
@@ -24,8 +27,8 @@
 
 - name: Add SSH pubkey
   authorized_key: >
-    user={{ ssh_user }}
-    key={{ lookup('file', {{ ssh_key_path }}) }}
+    user="{{ ssh_user }}"
+    key="{{ lookup('file', ssh_key_path) }}"
   when: ssh_add_key
 
 - name: Disable SSH root login
@@ -38,12 +41,16 @@
 - name: Disable SSH password authentication
   lineinfile: 
     dest=/etc/ssh/sshd_config
-    regexp="^PasswordLogin"
-    line="PasswordLogin no"
+    regexp="^PasswordAuthentication"
+    line="PasswordAuthentication no"
     state=present
 
+#- name: Restart SSH daemon
+#  service: name=ssh state=restarted
+
+# Workaround for bug in Ubuntu 14.04
 - name: Restart SSH daemon
-  service: name=ssh state=restarted
+  shell: service ssh restart
 
 - name: Install updates daily
   cron: >
