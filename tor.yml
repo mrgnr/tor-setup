@@ -2,6 +2,7 @@
 
 - name: Configure Tor relay
   hosts: all
+  remote_user: "{{ remote_user }}"
   sudo: True
   gather_facts: True
   roles:
