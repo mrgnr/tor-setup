@@ -1,0 +1,14 @@
+---
+
+- name: Configure Tor relay
+  hosts: tor-relay
+  become: yes
+  become_method: sudo
+  gather_facts: no
+  pre_tasks:
+    - raw: apt-get -y install python-simplejson
+  roles:
+    - common
+    - swap
+    - ssh
+    - tor

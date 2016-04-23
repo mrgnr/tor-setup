@@ -1,0 +1,13 @@
+---
+
+ssh_port: 22
+ssh_user: ""
+ssh_user_groups: "sudo"
+ssh_user_shell: "/bin/bash"
+ssh_user_pass: ""
+ssh_public_keys: []
+
+ssh_fail2ban_enabled: "true"
+ssh_fail2ban_maxretry: "3"
+ssh_fail2ban_bantime: "3600"
+ssh_fail2ban_ignoreip: "127.0.0.1/8"

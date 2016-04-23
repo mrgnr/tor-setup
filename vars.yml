@@ -1,9 +1,0 @@
-remote_user: "ubuntu"
-
-tor_nickname: "OnionRouter"
-tor_bandwidth_rate: "1000 KB"
-tor_bandwidth_burst: "2000 KB"
-tor_accounting_max: "500 GB"
-tor_accounting_start: "month 1 01:00"
-tor_contact_info: "example@example.com"
-tor_my_family: ""

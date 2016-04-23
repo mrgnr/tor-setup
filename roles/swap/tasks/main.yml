@@ -2,34 +2,47 @@
 
 - name: Install cryptsetup
   apt: name=cryptsetup update_cache=yes cache_valid_time=3600
+  tags: ['swap']
+
+- name: Enable cryptdisks
+  service: name=cryptdisks enabled=yes
+  tags: ['swap']
 
 - name: Allocate swap space
   command: >
     fallocate -l {{ swap_size }} {{ swap_location }}
     creates={{ swap_location }}
   register: allocate_swap
+  tags: ['swap']
 
 - name: Restrict swap permissions
   file: path={{ swap_location }} mode=0600
+  tags: ['swap']
 
 - name: Configure swap to be encrypted
   lineinfile: >
     dest=/etc/crypttab
     line="cryptswap {{ swap_location }} /dev/urandom swap"
+  tags: ['swap']
 
 - name: Restart cryptdisks
   service: name=cryptdisks state=restarted
+  tags: ['swap']
 
 - name: Mount swap on reboot
   mount: src={{ swap_location }} name=none fstype=swap opts=sw dump=0 passno=0 state=present
+  tags: ['swap']
 
 - name: Set swappiness
   sysctl: name=vm.swappiness value={{ swap_swappiness }} reload=yes
+  tags: ['swap']
 
 - name: Make swap
   command: mkswap {{ swap_location }}
   when: allocate_swap.changed
+  tags: ['swap']
 
 - name: Activate swap
   command: swapon {{ swap_location }}
   when: allocate_swap.changed
+  tags: ['swap']

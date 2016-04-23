@@ -1,0 +1,4 @@
+---
+
+- name: enable ufw
+  ufw: state=enabled logging=on

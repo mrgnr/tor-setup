@@ -1,28 +1,39 @@
 ---
 
-- name: Add Tor repository
+- name: Add Tor repositories
   apt_repository: repo="{{ item }}" state=present
-  with_items:
-    - "deb http://deb.torproject.org/torproject.org trusty main"
-    - "deb-src http://deb.torproject.org/torproject.org trusty main"
+  with_items: tor_repositories
+  tags: ['tor', 'tor:install']
 
 - name: Add Tor repository key
-  apt_key: keyserver=keys.gnupg.net id=886DDD89
+  apt_key: keyserver=keys.gnupg.net id={{ tor_apt_key_id }}
+  tags: ['tor', 'tor:install']
 
 - name: Update apt cache
   apt: update_cache=yes
+  tags: ['tor', 'tor:install']
 
 - name: Install Tor
   apt: name={{ item }} state=latest
   with_items:
     - tor
     - deb.torproject.org-keyring
+  tags: ['tor', 'tor:install']
+
+- name: Enable Tor
+  service: name=tor enabled=yes
+  tags: ['tor', 'tor:install']
 
 - name: Copy Tor configuration file
   template: src=torrc.j2 dest=/etc/tor/torrc
+  notify: reload Tor
+  tags: ['tor', 'tor:configuration']
 
 - name: Open Tor port
   ufw: rule=allow port={{ tor_port }}
+  tags: ['tor', 'tor:configuration']
 
-- name: Restart Tor
-  service: name=tor state=restarted
+- name: Open Tor directory port
+  ufw: rule=allow port={{ tor_dir_port }}
+  when: tor_dir_enable
+  tags: ['tor', 'tor:configuration']

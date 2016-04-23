@@ -1,4 +1,8 @@
-tor_port: "9001"
+tor_repositories:
+    - "deb http://deb.torproject.org/torproject.org xenial main"
+    - "deb-src http://deb.torproject.org/torproject.org xenial main"
+tor_apt_key_id: "A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89"
+tor_port: 9001
 tor_nickname: "OnionRouter"
 tor_bandwidth_rate: "1000 KB"
 tor_bandwidth_burst: "2000 KB"
@@ -7,5 +11,5 @@ tor_accounting_start: "month 1 01:00"
 tor_contact_info: ""
 tor_my_family: ""
 tor_exit_policy: "reject *:*"
-tor_dir_enable: True
-tor_dir_port: "9030"
+tor_dir_enable: yes
+tor_dir_port: 9030
